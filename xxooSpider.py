@@ -11,6 +11,9 @@ def get_HTML_text(url):
                                   Chrome/48.0.2564.82 Safari/537.36'}
         r = requests.get(url, headers=headers, timeout=30)
         r.raise_for_status
+        if r.status_code !== '200':
+     		print('%s，爬虫中断!' % (r.status_code))
+        	exit()
         r.encoding = 'utf-8'
         return r.text
     except Exception as ex:
@@ -22,7 +25,6 @@ def get_parsed_data(html):
     img_urls = []
     for img in soup.find_all('a', text='[查看原图]'):
         img_urls.append('http:' + img.get('href'))
-    print(type(soup.find('a', title='Older Comments')))
     next_url = 'http:' + soup.find(title='Older Comments').get('href')
     return (img_urls, next_url)
 
